@@ -2,12 +2,16 @@
 
 provider "azurerm" {
   features {}
+
+  client_id       = "your-appId"
+  client_secret   = "your-password"
+  subscription_id = "941c8a6b-7af5-43e0-ad0f-e7a9489547b4"
 }
 
 # Resource group
 resource "azurerm_resource_group" "rg" {
-  name     = "myResourceGroup"
-  location = "West Europe"
+  name     = "Dev-Testing"
+  location = "East US (Zone 1)"
 }
 
 # AKS Cluster
@@ -31,7 +35,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
     network_plugin = "azure"
     dns_service_ip = "10.2.0.10"
     service_cidr   = "10.2.0.0/24"
-    docker_bridge_cidr = "172.17.0.1/16"
+    docker_bridge_cidr = "172.17.0.1/24"
   }
 }
 
@@ -79,8 +83,8 @@ resource "kubernetes_deployment" "dotnet_app" {
       spec {
         container {
           name  = "dotnet-app"
-          image = "mcr.microsoft.com/dotnet/samples:aspnetapp"
-          ports {
+          image = "mycontainerregistry.azurecr.io/my-dotnet-app:latest"
+          port {
             container_port = 80
           }
         }
