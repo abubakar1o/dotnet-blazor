@@ -12,10 +12,10 @@ jobs:
     env:
       DOTNET_HOME: "/usr/bin/dotnet"
       DOTNET_VERSION: "8.0"
-      DOTNET_RUNTIME: "net${{ env.DOTNET_VERSION }}"
+      DOTNET_RUNTIME: "net8.0"
       APP_NAME: "BlazorApp1"
       BUILD_CONFIGURATION: "Release"
-      DOTNET_PATH: "/home/abubakar/java/dot-net/dotnet-blazor/BlazorApp1/bin/${{ env.BUILD_CONFIGURATION }}/${{ env.DOTNET_RUNTIME }}"
+      DOTNET_PATH: "/home/abubakar/java/dot-net/dotnet-blazor/BlazorApp1/bin/Release/net8.0"
 
     steps:
       # Step 1: Checkout the code from the GitHub repository
@@ -30,15 +30,15 @@ jobs:
 
       # Step 3: Restore NuGet packages
       - name: Restore dependencies
-        run: dotnet restore ${{ env.APP_NAME }}
+        run: dotnet restore $APP_NAME
 
       # Step 4: Build the application
       - name: Build the application
-        run: dotnet build ${{ env.APP_NAME }} --configuration ${{ env.BUILD_CONFIGURATION }}
+        run: dotnet build $APP_NAME --configuration $BUILD_CONFIGURATION
 
       # Step 5: Publish the application as an artifact
       - name: Publish the application
-        run: dotnet publish ${{ env.APP_NAME }} --configuration ${{ env.BUILD_CONFIGURATION }} --output ${{ env.DOTNET_PATH }}
+        run: dotnet publish $APP_NAME --configuration $BUILD_CONFIGURATION --output $DOTNET_PATH
 
       # Step 6: Upload the artifact
       - name: Upload Build Artifact
