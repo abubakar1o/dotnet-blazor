@@ -1,0 +1,55 @@
+name: .NET Blazor CI/CD Pipeline
+
+# Trigger the workflow on push to the main branch or manually
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Define the runner environment (Ubuntu)
+
+    # Define environment variables
+    env:
+      DOTNET_HOME: "/usr/bin/dotnet"
+      DOTNET_VERSION: "8.0"
+      DOTNET_RUNTIME: "net${{ env.DOTNET_VERSION }}"
+      APP_NAME: "BlazorApp1"
+      BUILD_CONFIGURATION: "Release"
+      DOTNET_PATH: "/home/abubakar/java/dot-net/dotnet-blazor/BlazorApp1/bin/${{ env.BUILD_CONFIGURATION }}/${{ env.DOTNET_RUNTIME }}"
+
+    steps:
+      # Step 1: Checkout the code from the GitHub repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 2: Set up .NET SDK
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      # Step 3: Restore NuGet packages
+      - name: Restore dependencies
+        run: dotnet restore ${{ env.APP_NAME }}
+
+      # Step 4: Build the application
+      - name: Build the application
+        run: dotnet build ${{ env.APP_NAME }} --configuration ${{ env.BUILD_CONFIGURATION }}
+
+      # Step 5: Run tests (optional)
+      - name: Run tests
+        run: dotnet test ${{ env.APP_NAME }}
+
+      # Step 6: Publish the application
+      - name: Publish the application
+        run: dotnet publish ${{ env.APP_NAME }} --configuration ${{ env.BUILD_CONFIGURATION }} --output ${{ env.DOTNET_PATH }}
+
+      # Step 7: Run the application (optional, typically you'd deploy instead of running in CI/CD)
+      - name: Run the application
+        run: dotnet ${{ env.DOTNET_PATH }}/${{ env.APP_NAME }}.dll
