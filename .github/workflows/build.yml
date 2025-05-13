@@ -1,14 +1,8 @@
-name: .NET Blazor CI/CD Pipeline
+name: .NET Blazor Build and Publish Artifact
 
-# Trigger the workflow on push to the main branch or manually
+# Trigger the workflow manually
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-  workflow_dispatch:  # Allow manual trigger
+  workflow_dispatch:  # Allows manual trigger
 
 jobs:
   build:
@@ -42,14 +36,13 @@ jobs:
       - name: Build the application
         run: dotnet build ${{ env.APP_NAME }} --configuration ${{ env.BUILD_CONFIGURATION }}
 
-      # Step 5: Run tests (optional)
-      - name: Run tests
-        run: dotnet test ${{ env.APP_NAME }}
-
-      # Step 6: Publish the application
+      # Step 5: Publish the application as an artifact
       - name: Publish the application
         run: dotnet publish ${{ env.APP_NAME }} --configuration ${{ env.BUILD_CONFIGURATION }} --output ${{ env.DOTNET_PATH }}
 
-      # Step 7: Run the application (optional, typically you'd deploy instead of running in CI/CD)
-      - name: Run the application
-        run: dotnet ${{ env.DOTNET_PATH }}/${{ env.APP_NAME }}.dll
+      # Step 6: Upload the artifact
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: blazor-app-artifact
+          path: ${{ env.DOTNET_PATH }}
