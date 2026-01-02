@@ -30,7 +30,7 @@ jobs:
 
       # 4️⃣ Build
       - name: Publish
-        run: dotnet publish BlazorApp1 --configuration Release --no-build --output publish
+        run: dotnet publish BlazorApp1/BlazorApp1.csproj --configuration Release --no-build --output publish
         
       # 5️⃣ Publish
       - name: Publish
