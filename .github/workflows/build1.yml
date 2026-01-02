@@ -28,16 +28,12 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore ${{ env.APP_NAME }}
 
+      - name: Dot Net Build
+        run: dotnet build --configuration Release
+
       # 4️⃣ Build
       - name: Publish
-        run: dotnet publish BlazorApp1/BlazorApp1.csproj --configuration Release --no-build --output publish
-        
-      # 5️⃣ Publish
-      - name: Publish
-        run: dotnet publish ${{ env.APP_NAME }} \
-             --configuration ${{ env.BUILD_CONFIGURATION }} \
-             --no-build \
-             --output ${{ env.DOTNET_PATH }}
+        run: dotnet publish --configuration Release --output publish
 
       # 6️⃣ Upload artifact (FIXED)
       - name: Upload Build Artifact
