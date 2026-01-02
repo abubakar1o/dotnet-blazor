@@ -29,9 +29,9 @@ jobs:
         run: dotnet restore ${{ env.APP_NAME }}
 
       # 4️⃣ Build
-      - name: Build
-        run: dotnet build ${{ env.APP_NAME }} --configuration ${{ env.BUILD_CONFIGURATION }} --no-restore
-
+      - name: Publish
+        run: dotnet publish BlazorApp1 --configuration Release --no-build --output publish
+        
       # 5️⃣ Publish
       - name: Publish
         run: dotnet publish ${{ env.APP_NAME }} \
